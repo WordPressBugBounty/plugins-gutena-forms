@@ -77,7 +77,7 @@ if ( ! class_exists( 'Gutena_Forms_Rest_API_Controller' ) ) :
 				array(
 					'permission_callback' => array( self::class, 'permission_callback' ),
 					'methods'             => 'GET',
-					'callback'			  => array( $this, 'get_menus' ),
+					'callback'            => array( $this, 'get_menus' ),
 				)
 			);
 
@@ -87,7 +87,7 @@ if ( ! class_exists( 'Gutena_Forms_Rest_API_Controller' ) ) :
 				array(
 					'permission_callback' => array( self::class, 'permission_callback' ),
 					'methods'             => 'GET',
-					'callback'			  => array( $this, 'get_left_navigation_menus' ),
+					'callback'            => array( $this, 'get_left_navigation_menus' ),
 				)
 			);
 
@@ -155,11 +155,9 @@ if ( ! class_exists( 'Gutena_Forms_Rest_API_Controller' ) ) :
 		 * Get menus callback
 		 *
 		 * @since 1.7.0
-		 * @param WP_REST_Request $request The REST request.
-		 *
 		 * @return WP_REST_Response
 		 */
-		public function get_menus( $request ) {
+		public function get_menus() {
 			$menus = array(
 				array(
 					'title' => __( 'Dashboard', 'gutena-forms' ),
@@ -188,6 +186,8 @@ if ( ! class_exists( 'Gutena_Forms_Rest_API_Controller' ) ) :
 				),
 			);
 
+			$menus = apply_filters( 'gutena_forms__top_menu_navigation', $menus );
+
 			if ( is_array( $menus ) && ! empty( $menus ) ) {
 				return rest_ensure_response(
 					array(
@@ -211,11 +211,9 @@ if ( ! class_exists( 'Gutena_Forms_Rest_API_Controller' ) ) :
 		 * Get left navigation menus callback
 		 *
 		 * @since 1.7.0
-		 * @param WP_REST_Request $request The REST request.
-		 *
 		 * @return WP_REST_Response
 		 */
-		public function get_left_navigation_menus( $request ) {
+		public function get_left_navigation_menus() {
 			$menus = array(
 				array(
 					'title' => __( 'General Settings', 'gutena-forms' ),
@@ -234,27 +232,20 @@ if ( ! class_exists( 'Gutena_Forms_Rest_API_Controller' ) ) :
 							'slug'  => 'user-access',
 						),
 						array(
-								'title' => __( 'Weekly Summary', 'gutena-forms' ),
-								'slug'  => 'weekly-summary',
-							),
-						)
+							'title' => __( 'Weekly Summary', 'gutena-forms' ),
+							'slug'  => 'weekly-summary',
+						),
+					),
 				),
-				/**
-				 * Disabling this due to some reasons, will enable it in future
-				 *
-				 * @todo Enable this in future after adding necessary functionalities
-				 * array(
-				 * 'title' => __( 'Spam Protection', 'gutena-forms' ),
-				 * 'icon'  => 'Shield',
-				 * 'menus' => array(
-				 * array(
-				 * 'title' => __( 'Honeypot', 'gutena-forms' ),
-				 * 'slug'  => 'honeypot',
-				 * ),
-				 * ),
-				* )
-				*/
+				array(
+					'title' => __( 'MCP', 'gutena-forms' ),
+					'icon'  => 'Robot',
+					'menus' => array(),
+					'slug'  => 'mcp',
+				),
 			);
+
+			$menus = apply_filters( 'gutena_forms__left_navigation_menus', $menus );
 
 			if ( is_array( $menus ) && ! empty( $menus ) ) {
 				return rest_ensure_response(
@@ -323,7 +314,7 @@ if ( ! class_exists( 'Gutena_Forms_Rest_API_Controller' ) ) :
 		 * @return WP_REST_Response
 		 */
 		public function save_settings( $request ) {
-			$settings_id  = sanitize_text_field( wp_unslash( $request->get_param( 'settings_id' ) ) );
+			$settings_id   = sanitize_text_field( wp_unslash( $request->get_param( 'settings_id' ) ) );
 			$settings_data = $request->get_param( 'settings_data' );
 
 			$gutena_forms_settings = apply_filters( 'gutena_forms__settings', array() );

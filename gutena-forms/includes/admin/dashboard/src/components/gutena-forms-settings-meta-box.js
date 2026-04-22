@@ -7,7 +7,7 @@ import GutenaFormsSubmitButton from './fields/gutena-forms-submit-button';
 import { gutenaFormsUpdateSettings } from "../api";
 import { toast } from 'react-toastify';
 import { __ } from '@wordpress/i18n';
-import { SettingsTemplates } from '../utils/templates';
+import { SettingsTemplates, FieldTemplates } from '../utils/templates';
 import GutenaFormsProBadge from './gutena-forms-pro-badge';
 
 const GutenaFormsSettingsMetaBox = ( { title, description, items, isPro = false, onClick } ) => {
@@ -24,6 +24,8 @@ const GutenaFormsSettingsMetaBox = ( { title, description, items, isPro = false,
 			items.map( ( item, id ) => {
 				if ( 'template' === item.type ) {
 					setTemplate( item.name );
+				} else if ( 'field-template' === item.type ) {
+					settings[ id ] = item;
 				} else {
 					fieldValue[ item.id ] = item.value || item.default;
 					settings[ id ] = {
@@ -108,6 +110,15 @@ const GutenaFormsSettingsMetaBox = ( { title, description, items, isPro = false,
 					/>
 				);
 				break;
+
+			case 'field-template':
+				const FieldTemplate = FieldTemplates[ field.name ];
+				fieldElement = (
+					<>
+						{ FieldTemplate && <FieldTemplate { ...field } /> }
+					</>
+				);
+				break;
 			default:
 				console.log( 'Field not found', field )
 				fieldElement = null;
@@ -143,7 +154,7 @@ const GutenaFormsSettingsMetaBox = ( { title, description, items, isPro = false,
 					)
 				}
 			</h2>
-			<p>{ description }</p>
+			<p dangerouslySetInnerHTML={ { __html: description } } />
 
 			<div className={ 'gutena-forms__settings-meta-box' }>
 				{ ! template && ! loading && settings && Object.keys( settings ).map( ( key, index ) => {

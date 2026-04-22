@@ -1,6 +1,7 @@
 import GutenaFormsAccordion from './gutena-forms-accordion'
 import Gear from '../icons/gear';
 import Shield from '../icons/shield';
+import Robot from '../icons/robot';
 import { useState, useEffect } from '@wordpress/element';
 import { gutenaFormsFetchSettingsMenu } from '../api';
 
@@ -35,6 +36,10 @@ const GutenaFormsLeftMenuNavigation = () => {
 												IconComponent = <Shield />;
 												break;
 
+											case 'Robot':
+												IconComponent = <Robot />
+												break;
+
 											case 'Gear':
 											default:
 												IconComponent = <Gear />;
@@ -46,6 +51,7 @@ const GutenaFormsLeftMenuNavigation = () => {
 												icon={ IconComponent }
 												title={ menu.title }
 												items={ menu.menus }
+												slug={ menu.slug }
 											/>
 										</div>
 									);

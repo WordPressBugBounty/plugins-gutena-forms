@@ -5,6 +5,7 @@ import { NavLink } from 'react-router';
 import Crown from '../icons/crown';
 import { gutenaFormsFetchMenus } from '../api';
 import { gutenaFormsStrContains } from '../utils/functions';
+import Burger from "../icons/burger";
 
 const GutenaFormsHeader = ( { activeMenu, setActiveMenu } ) => {
 
@@ -36,6 +37,9 @@ const GutenaFormsHeader = ( { activeMenu, setActiveMenu } ) => {
 
 				{ ! loading && menus && (
 					<nav className={ 'gutena-forms__header-menu' }>
+						<div className={ 'mobile_toggle' }>
+							<Burger />
+						</div>
 						<ul>
 							{ menus.map( ( menu, index ) => {
 								if ( menu.external ) {
@@ -72,7 +76,7 @@ const GutenaFormsHeader = ( { activeMenu, setActiveMenu } ) => {
 						<Button
 							className={ 'gutena-forms__upgrade-button' }
 							variant="primary"
-							href="https://gutenaforms.com/pricing/?utm_source=plugin_dashboard&utm_medium=website&utm_campaign=free_plugin"
+							href="https://gutenaforms.com/pricing/?utm_source=plugin_header&utm_medium=website&utm_campaign=free_plugin"
 							target="_blank"
 							rel="noopener noreferrer"
 						>
