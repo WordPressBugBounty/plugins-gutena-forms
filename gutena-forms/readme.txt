@@ -2,7 +2,7 @@
 Contributors:      wpexpertsio
 Tags:              contact form, custom form, forms, form builder, WordPress form plugin
 Tested up to:      7.0
-Stable tag:        2.0.0
+Stable tag:        2.1.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,7 +18,13 @@ WordPress form builder to create lightweight contact forms, survey forms, feedba
 [Gutena Forms](https://gutenaforms.com/) is the easiest WordPress form builder for creating responsive, lightweight forms in the WordPress block editor (formerly Gutenberg). It works as a block editor native form plugin that lets you build contact forms, survey forms, feedback forms, booking forms, and any custom form using a dedicated WordPress block.
 
 
-You can create custom WordPress forms visually inside the block editor using the Gutenberg Form Block with complete control over styling, layout, fields, and form behavior. Gutena Forms loads fast, stays fully responsive on every device, and keeps your website’s performance at its peak.
+* Complete control over the look and feel
+* Fully customizable, so you can easily change the color, border, radius, typography, padding, margin and much more..
+* No jQuery, so it won’t slow down your website
+* You can add icons to the tabs
+* You can add other core blocks inside the tab container
+* Control all tabs from a single setting
+* Responsive settings
 
 Use ready-made WordPress form templates, drag and drop fields, and powerful Pro features to build forms that match your brand and help you collect the data you need.
 
@@ -402,6 +408,9 @@ Please report security bugs found in the source code of the undefined plugin thr
 
 
 == Changelog ==
+
+= 2.1.0 - Aug 13, 2026 =
+* New – Added Auto Responder feature.
 
 = 2.0.0 - Jul 27, 2026 =
 * New - Redesigned frontend UI for all form fields with consistent layout, labels, validation states, and accessibility
