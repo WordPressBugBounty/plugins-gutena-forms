@@ -16,7 +16,7 @@ const DEFAULT_BULK_ACTION_OPTIONS = [
 	{ label: __( 'Delete', 'gutena-forms' ), value: 'delete' },
 ];
 
-const GutenaFormsDatatable = ( { headers, data, handleBulkAction, tableChildren, customFilters, bulkActionOptions, name } ) => {
+const GutenaFormsDatatable = ( { headers, data, handleBulkAction, tableChildren, customFilters, bulkActionOptions, name, emptyMessage } ) => {
 	const [ numberOfRows, setNumberOfRows ] = useState( 10 );
 	const [ currentPage, setCurrentPage ] = useState( 1 );
 	const [ searchTerm, setSearchTerm ] = useState( '' );
@@ -42,7 +42,16 @@ const GutenaFormsDatatable = ( { headers, data, handleBulkAction, tableChildren,
 				let startDate = new Date( selectedDates[0] );
 				let endDate = new Date( selectedDates[1] );
 
-				return current >= startDate && current <= endDate;
+				if ( isNaN( current.getTime() ) ) {
+					return false;
+				}
+
+				// Make endDate inclusive by extending to the start of the next day.
+				// Without this, entries at any time after midnight on the selected
+				// end date would fail the <= comparison (midnight < 1:00 AM, etc.).
+				endDate.setDate( endDate.getDate() + 1 );
+
+				return current >= startDate && current < endDate;
 			} );
 		}
 
@@ -208,6 +217,7 @@ const GutenaFormsDatatable = ( { headers, data, handleBulkAction, tableChildren,
 						<Button
 							className={ 'gutena-forms__primary-button' }
 							onClick={ handleBulkActions }
+							disabled={ 'bulk_actions' === bulkAction || ! selectedData.length }
 						>{ __( 'Apply', 'gutena-forms' ) }</Button>
 					</div>
 
@@ -270,6 +280,7 @@ const GutenaFormsDatatable = ( { headers, data, handleBulkAction, tableChildren,
 								setSearchTerm( '' );
 								setSelectedDates( '' );
 							} }
+							disabled={ ! searchTerm && 2 !== selectedDates.length }
 						>{ __( 'Reset', 'gutena-forms' ) }</Button>
 					</div>
 
@@ -280,6 +291,7 @@ const GutenaFormsDatatable = ( { headers, data, handleBulkAction, tableChildren,
 				headers={ headers }
 				data={ tableData }
 				name={ name }
+				emptyMessage={ emptyMessage }
 			>
 				{ {
 					header: {

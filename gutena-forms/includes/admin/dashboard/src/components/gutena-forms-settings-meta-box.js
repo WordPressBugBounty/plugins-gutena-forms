@@ -23,7 +23,10 @@ const GutenaFormsSettingsMetaBox = ( { id, title, description, items, isPro = fa
 	const { settings_id } = useParams();
 	const [ settings, setSettings ] = useState( false );
 	const [ fieldValue, setFieldValue ] = useState( {} );
+	const [ initialFieldValue, setInitialFieldValue ] = useState( {} );
 	const [ loading, setLoading ] = useState( true );
+	const [ saving, setSaving ] = useState( false );
+	const [ hasChange, setHasChange ] = useState( false );
 	const [ template, setTemplate ] = useState( false );
 	const [ activeMergeField, setActiveMergeField ] = useState( 'subject' );
 	const pendingMergeCursor = useRef( null );
@@ -78,11 +81,13 @@ const GutenaFormsSettingsMetaBox = ( { id, title, description, items, isPro = fa
 
 			setSettings( parsedSettings );
 			setFieldValue( initialFieldValue );
+			setInitialFieldValue( initialFieldValue );
 			setLoading( false );
 		},
 		[ items ] );
 
 	const handleFieldChange = ( id, newValue ) => {
+		setHasChange( true );
 		setFieldValue( ( prevValue ) => ( {
 			...prevValue,
 			[ id ]: newValue,
@@ -126,13 +131,17 @@ const GutenaFormsSettingsMetaBox = ( { id, title, description, items, isPro = fa
 		return true;
 	}
 
-	const handleSubmit = () => {
+const handleSubmit = () => {
+		setSaving( true );
 		gutenaFormsUpdateSettings( settings_id, fieldValue )
 			.then( () => {
+				setInitialFieldValue( fieldValue );
+				setHasChange( false );
 				toast.success(
 					__( 'Settings updated successfully.', 'gutena-forms' )
 				);
 			} )
+			.finally( () => setSaving( false ) );
 	};
 
 	const getFieldDisabledState = ( field ) => {
@@ -211,6 +220,7 @@ const GutenaFormsSettingsMetaBox = ( { id, title, description, items, isPro = fa
 					<GutenaFormsSubmitButton
 						label={ field.label }
 						onClick={ handleSubmit }
+						disabled={ saving || ! hasChange }
 					/>
 				);
 				break;
